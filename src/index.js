@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import Login from './Login';
 import GameOver from './GameOver';
-import NotFoundRoute from './NotFoundRoute';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';

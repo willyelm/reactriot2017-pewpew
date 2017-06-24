@@ -6,8 +6,8 @@ export default class Frog extends React.Component {
 
   getCellStyle = ()=> {
     return {
-      left: GLOBAL.CELL_SIZE * this.props.position.x,
-      top: GLOBAL.CELL_SIZE * this.props.position.y,
+      left: GLOBAL.CELL_SIZE * this.props.position.x || 0,
+      top: GLOBAL.CELL_SIZE * this.props.position.y || 0,
       height: (GLOBAL.CELL_SIZE/2),
       width: (GLOBAL.CELL_SIZE/2)
     }

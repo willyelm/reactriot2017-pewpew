@@ -70,7 +70,7 @@ export default class World extends React.Component {
     };
   }
 
-  setPlayerPosition({x, y}) {
+  async setPlayerPosition({x, y}) {
     //BOUNDARY LIMIT VALIDATION
     if (x < 0 || x > (this.props.worldMap[0].length - 1) || y < 0 || y > (this.props.worldMap.length - 1)) {
       return false
@@ -79,10 +79,11 @@ export default class World extends React.Component {
       x: x,
       y: y
     };
-    this.state.player.position = position;
-    this.state.player.relativePosition = this.getRelativePosition(position);
-    this.setState({
-      player: this.state.player
+    await this.setState({
+      player: {
+        position,
+        relativePosition: this.getRelativePosition(position)
+      }
     });
     this.setCameraFocus(position);
   }
@@ -123,7 +124,6 @@ export default class World extends React.Component {
 
         default:
           return;
-          break;
       }
       this.setPlayerPosition(playerPosition);
     }
@@ -145,37 +145,38 @@ export default class World extends React.Component {
     this.setVisibleMap();
   }
 
-  setVisibleMap() {
+  async setVisibleMap() {
     this.mapStartPoints = {
       x: (this.state.cameraFocusPoint.x - this.screenDimensions.radius),
       y: (this.state.cameraFocusPoint.y - this.screenDimensions.radius),
     };
-    this.state.visibleTileMap = this.props.worldMap.slice(this.mapStartPoints.y, (this.mapStartPoints.y + this.screenDimensions.size)).map((row) => {
+
+    let visibleTileMap = this.props.worldMap.slice(this.mapStartPoints.y, (this.mapStartPoints.y + this.screenDimensions.size)).map((row) => {
       return row.slice(this.mapStartPoints.x, (this.mapStartPoints.x + this.screenDimensions.size));
     });
-    this.setState({
-      visibleTileMap: this.state.visibleTileMap
+    await this.setState({
+      visibleTileMap: visibleTileMap
     });
   }
 
-  fireBullet(){
+  fireBullet = () =>{
     this.setState({bulletFired: true});
-  }
+  };
 
-  killBullet(){
+  killBullet = () =>{
     this.setState({bulletFired: false});
-  }
+  };
 
   render() {
     return (
       <div className="world-container">
         <TileMap tileMap={this.state.visibleTileMap}/>
-        <Frog position={this.state.player.relativePosition} fireBullet={this.fireBullet.bind(this)}/>
+        <Frog position={this.state.player.relativePosition} fireBullet={this.fireBullet}/>
         {/*{this.state.opponents.map((position, index) =>*/}
           {/*<Opponents key={index} updatePosition= {this.updatePosition}*/}
                      {/*index={index} position={this.getRelativePosition(position)}/>)*/}
         {/*}*/}
-        {this.state.bulletFired ? <Bullet position={this.state.player.relativePosition} killBullet={this.killBullet.bind(this)}/> : null}
+        {this.state.bulletFired ? <Bullet position={this.state.player.relativePosition} killBullet={this.killBullet}/> : null}
       </div>
     )
   }

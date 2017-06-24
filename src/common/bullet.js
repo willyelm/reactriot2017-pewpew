@@ -24,8 +24,8 @@ class Bullet extends Component {
     this.intervalHolder = setInterval(this.changePos, 200);
   }
 
-  destroy() {
-    clearInterval(this.intervalHolder);
+  async destroy() {
+    await clearInterval(this.intervalHolder);
     this.props.killBullet();
   }
 
